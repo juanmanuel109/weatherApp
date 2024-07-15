@@ -11,6 +11,7 @@
 		ADA73B092C45DF4B00745B22 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA73B082C45DF4B00745B22 /* ContentView.swift */; };
 		ADA73B0B2C45DF4E00745B22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADA73B0A2C45DF4E00745B22 /* Assets.xcassets */; };
 		ADA73B0E2C45DF4E00745B22 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADA73B0D2C45DF4E00745B22 /* Preview Assets.xcassets */; };
+		ADA73B162C45E2B300745B22 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ADA73B152C45E2B300745B22 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		ADA73B082C45DF4B00745B22 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		ADA73B0A2C45DF4E00745B22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADA73B0D2C45DF4E00745B22 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		ADA73B172C45E2DE00745B22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADA73B162C45E2B300745B22 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +54,7 @@
 		ADA73B052C45DF4B00745B22 /* Forecast */ = {
 			isa = PBXGroup;
 			children = (
+				ADA73B172C45E2DE00745B22 /* Info.plist */,
 				ADA73B062C45DF4B00745B22 /* ForecastApp.swift */,
 				ADA73B082C45DF4B00745B22 /* ContentView.swift */,
 				ADA73B0A2C45DF4E00745B22 /* Assets.xcassets */,
@@ -83,6 +87,9 @@
 			dependencies = (
 			);
 			name = Forecast;
+			packageProductDependencies = (
+				ADA73B152C45E2B300745B22 /* Alamofire */,
+			);
 			productName = Forecast;
 			productReference = ADA73B032C45DF4B00745B22 /* Forecast.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +118,9 @@
 				Base,
 			);
 			mainGroup = ADA73AFA2C45DF4B00745B22;
+			packageReferences = (
+				ADA73B142C45E2B300745B22 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = ADA73B042C45DF4B00745B22 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -275,6 +285,7 @@
 				DEVELOPMENT_TEAM = M5HP2X63HX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Forecast/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -304,6 +315,7 @@
 				DEVELOPMENT_TEAM = M5HP2X63HX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Forecast/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -344,6 +356,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		ADA73B142C45E2B300745B22 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = exactVersion;
+				version = 5.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		ADA73B152C45E2B300745B22 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ADA73B142C45E2B300745B22 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = ADA73AFB2C45DF4B00745B22 /* Project object */;
 }

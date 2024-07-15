@@ -1,11 +1,20 @@
-//
-//  ContentView.swift
-//  Forecast
-//
-//  Created by Juan Manuel Ordoñez on 15/07/24.
-//
+
 
 import SwiftUI
+
+struct Wheather: Codable {
+    var location: Location
+}
+struct Location: Codable {
+    var name: String
+}
+struct Forecast: Codable {
+    
+}
+
+struct ForecastDay: Codable {
+    
+}
 
 struct ContentView: View {
     var body: some View {
