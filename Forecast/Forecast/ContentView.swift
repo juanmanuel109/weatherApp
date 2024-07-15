@@ -9,11 +9,12 @@ struct Location: Codable {
     var name: String
 }
 struct Forecast: Codable {
-    
+    var forecastday : [Forecast]
 }
 
-struct ForecastDay: Codable {
-    
+struct ForecastDay: Codable, Identifiable {
+    var date_epoch: Int
+    var id: Int{date_epoch}
 }
 
 struct ContentView: View {
