@@ -1,5 +1,3 @@
-
-
 import SwiftUI
 
 struct Wheather: Codable {
@@ -15,6 +13,10 @@ struct Forecast: Codable {
 struct ForecastDay: Codable, Identifiable {
     var date_epoch: Int
     var id: Int{date_epoch}
+}
+
+struct Day: Codable {
+    var avgtemp_c : Double
 }
 
 struct ContentView: View {
