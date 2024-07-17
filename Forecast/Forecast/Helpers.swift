@@ -32,7 +32,6 @@ func getWeatherEmoji(code: Int) -> String {
     return weatherEmoji
 }
 func getBackgroundColor(code: Int) -> Color {
-    let blueSky = Color.init(red: 135/255, green: 206/255, blue: 235/255)
     let greySky = Color.init(red: 47/255, green: 79/255, blue: 79/255)
     var backgroundColor = greySky
     switch code {
@@ -48,3 +47,30 @@ func getBackgroundColor(code: Int) -> Color {
 func getShortDate(epoch: Int) -> String{
     return Date(timeIntervalSince1970: TimeInterval(epoch)).formatted(Date.FormatStyle().weekday(.abbreviated))
 }
+
+func getShortTime(time: String) -> String{
+    var meridiem = "AM"
+    var displayTime = 1
+    let militaryTime = time.suffix(5)
+    let currentTime = militaryTime.prefix(2)
+    if (currentTime == "00" || currentTime == "12") {
+            displayTime = 12
+            if (currentTime == "00") {
+                meridiem = "AM"
+            } else {
+                meridiem = "PM"
+            }
+        } else {
+            if let intTime = Int(currentTime) {
+                if (intTime >= 13) {
+                    displayTime = intTime - 12
+                    meridiem = "PM"
+                } else {
+                    displayTime = intTime
+                    meridiem = "AM"
+                }
+            }
+        }
+        return "\(displayTime)\(meridiem)"
+    }
+

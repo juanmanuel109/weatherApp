@@ -6,10 +6,13 @@ import Alamofire
 struct ContentView: View {
     
     @State private var results = [ForecastDay]()
+    @State var hourlyForecast=[Hour]()
+    @State var query: String = ""
+    @State var contentSize: CGSize = .zero
+    @State var textFieldHeight = 15.0
     
-    
-    @State var backgroundColor = Color.init(red: 135/255, green: 206/255, blue: 235/255)
-    @State var weatherEmoji = "☀️"
+    @State var backgroundColor = Color.init(red: 47/255, green: 79/255, blue: 79/255)
+    @State var weatherEmoji = "🌨️"
     @State var currentTemp = 0
     @State var conditionText = "Slightly Overcast"
     @State var cityName = "Toronto"
@@ -34,26 +37,63 @@ struct ContentView: View {
         VStack {
             Spacer()
             Text("\(cityName)")
-                .font(.system(size: 35))
-                .foregroundStyle(.white)
-                .bold()
-            Text("\(Date().formatted(date:.complete,time:.omitted))")
-                .foregroundStyle(.white)
-                .font(.system(size: 18))
+            .font(.system(size: 35))
+            .foregroundStyle(.white)
+            .bold()
+            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+            .padding(.bottom, 1)
+            Text("\(Date().formatted(date: .complete, time: .omitted))")
+            .font(.system(size: 16))
+            .foregroundStyle(.white)
+            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
             Text(weatherEmoji)
-                .font(.system(size: 180))
-                .shadow(radius: 75)
+            .font(.system(size: 110))
+            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
             Text("\(currentTemp)°C")
-                .foregroundStyle(.white)
-                .font(.system(size: 70))
-                .bold()
+            .font(.system(size: 50))
+            .foregroundStyle(.white)
+            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
             Text("\(conditionText)")
-                .font(.system(size: 22))
-                .foregroundStyle(.white)
-                .bold()
+            .font(.system(size: 18))
+            .foregroundStyle(.white)
+            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
             Spacer()
             Spacer()
             Spacer()
+            Text("Hourly Forecast")
+            .font(.system(size: 17))
+            .foregroundStyle(.white)
+            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+            .bold()
+            ScrollView(.horizontal,showsIndicators: false){
+                HStack{
+                    Spacer()
+                    ForEach(hourlyForecast) { forecast in
+                        VStack {
+                            Text("\(getShortTime(time: forecast.time))")
+                                .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                            Text("\(getWeatherEmoji(code: forecast.condition.code))")
+                                .frame(width: 50, height: 14)
+                                .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                            Text("\(Int(forecast.temp_c))°C")
+                                .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                        }
+                        .frame(width: 50, height: 50)
+                    }
+                    Spacer()
+                }
+                .background(Color.white.blur(radius: 75).opacity(0.35))
+                .cornerRadius(15)
+            }
+            .padding(.top, .zero)
+            .padding(.leading, 18)
+            .padding(.trailing, 18)
+            Spacer()
+            Text(" 3 Day Forecast")
+            .font(.system(size: 22))
+            .foregroundStyle(.white)
+            .bold()
+            
             List(results){ forecast in
                 HStack(alignment: .center, spacing: nil){
                     Text("\(getShortDate(epoch: forecast.date_epoch))")
