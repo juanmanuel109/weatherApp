@@ -1,38 +1,12 @@
 import SwiftUI
 import Alamofire
 
-struct Weather: Codable {
-    var location: Location
-    var forecast: Forecast
-}
-struct Location: Codable {
-    var name: String
-}
-struct Forecast: Codable {
-    var forecastday : [ForecastDay]
-}
 
-struct ForecastDay: Codable, Identifiable {
-    var date_epoch: Int
-    var id: Int{date_epoch}
-    var day: Day
-}
-
-struct Day: Codable {
-    var avgtemp_c : Double
-    var condition : Condition
-}
-
-struct Condition: Codable {
-    var text: String
-}
 
 struct ContentView: View {
     
     @State private var results = [ForecastDay]()
     
-    let blueSky = Color.init(red: 135/255, green: 206/255, blue: 235/255)
-    let greySky = Color.init(red: 47/255, green: 79/255, blue: 79/255)
     
     @State var backgroundColor = Color.init(red: 135/255, green: 206/255, blue: 235/255)
     @State var weatherEmoji = "☀️"
@@ -43,6 +17,20 @@ struct ContentView: View {
     
     
     var body: some View {
+        if loading {
+            ZStack {
+               Color.init(backgroundColor)
+                .ignoresSafeArea()
+               ProgressView()
+                .scaleEffect(2, anchor: .center)
+                .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .task {
+                    await fetchWeather()
+                    }
+               }
+            
+        } else {
         VStack {
             Spacer()
             Text("\(cityName)")
@@ -66,21 +54,32 @@ struct ContentView: View {
             Spacer()
             Spacer()
             Spacer()
-            List{
-                Text("Date1")
-                Text("Date2")
-                Text("Date3")
+            List(results){ forecast in
+                HStack(alignment: .center, spacing: nil){
+                    Text("\(getShortDate(epoch: forecast.date_epoch))")
+                        .frame(maxWidth: 50, alignment: .leading)
+                        .bold()
+                    Text("\(getWeatherEmoji(code: forecast.day.condition.code))")
+                        .frame(maxWidth: 30, alignment: .leading)
+                    Text("\(Int(forecast.day.avgtemp_c))°C")
+                        .frame(maxWidth: 50, alignment: .leading)
+                    Spacer()
+                    Text("\(forecast.day.condition.text)")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .listRowBackground(Color.white.blur(radius: 75).opacity(0.5))
             }
             .contentMargins(.vertical, 0)
             .scrollContentBackground(.hidden)
+            .preferredColorScheme(.dark)
             Spacer()
             Text("Data supplied by Weather API")
+                .foregroundStyle(.white)
                 .font(.system(size: 14))
         }
         .background(backgroundColor)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .task {
-            await fetchWeather()
+        
         }
     }
     
@@ -89,13 +88,17 @@ struct ContentView: View {
         request.responseDecodable(of: Weather.self) { response in
             switch response.result {
             case.success(let weather): 
-                dump(weather)
+                //dump(weather)
                 cityName = weather.location.name
                 results = weather.forecast.forecastday
-                currentTemp = Int(results[0].day.avgtemp_c)
-                backgroundColor = getBackgroundColor(text: results[0].day.condition.text)
-                weatherEmoji = getWeatherEmoji(text: results[0].day.condition.text)
-                conditionText = results[0].day.condition.text
+                var index = 0
+                if Date(timeIntervalSince1970: TimeInterval(results[0].date_epoch)).formatted(Date.FormatStyle().weekday(.abbreviated)) != Date().formatted(Date.FormatStyle().weekday(.abbreviated)) {
+                    index = 1
+                }
+                currentTemp = Int(results[index].day.avgtemp_c)
+                backgroundColor = getBackgroundColor(code: results[index].day.condition.code)
+                weatherEmoji = getWeatherEmoji(code: results[index].day.condition.code)
+                conditionText = results[index].day.condition.text
                 loading = false
             case .failure(let error):
                 print(error)
@@ -104,37 +107,7 @@ struct ContentView: View {
     }
     
     
-    func getWeatherEmoji(text: String) -> String {
-        var weatherEmoji = "☀️"
-        let conditionText = text.lowercased()
-        if conditionText.contains("snow") ||
-            conditionText.contains("blizzard") {
-            weatherEmoji = "🌨️"
-        } else if conditionText.contains("rain") {
-            weatherEmoji = "🌧"
-        } else if conditionText.contains("partly cloudy") {
-            weatherEmoji = "⛅️"
-        } else if conditionText.contains("cloudy") ||
-                    conditionText.contains("overcast") {
-            weatherEmoji = "☁️"
-        } else if conditionText.contains("clear") ||
-                    conditionText.contains("sunny") {
-            weatherEmoji = "🌞"
-        }
-        return weatherEmoji
-    }
-    func getBackgroundColor(text: String) -> Color {
-        var backgroundColor = blueSky
-        let conditionText = text.lowercased()
-        if !(conditionText.contains("clear") || conditionText.contains("sunny")) {
-            backgroundColor = greySky
-        }
-        return backgroundColor
-    }
     
-    func getShortDate(epoch: Int) -> String{
-        return Date(timeIntervalSince1970: TimeInterval(epoch)).formatted(Date.FormatStyle().weekday(.abbreviated))
-    }
 }
 
 #Preview {
