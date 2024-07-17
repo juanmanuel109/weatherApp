@@ -17,7 +17,7 @@ struct ContentView: View {
     @State var conditionText = "Slightly Overcast"
     @State var cityName = "Toronto"
     @State var loading = true
-    
+     
     
     var body: some View {
         if loading {
@@ -29,102 +29,144 @@ struct ContentView: View {
                 .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .task {
-                    await fetchWeather()
+                    await fetchWeather(query: "")
                     }
                }
             
         } else {
-        VStack {
-            Spacer()
-            Text("\(cityName)")
-            .font(.system(size: 35))
-            .foregroundStyle(.white)
-            .bold()
-            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
-            .padding(.bottom, 1)
-            Text("\(Date().formatted(date: .complete, time: .omitted))")
-            .font(.system(size: 16))
-            .foregroundStyle(.white)
-            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
-            Text(weatherEmoji)
-            .font(.system(size: 110))
-            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
-            Text("\(currentTemp)°C")
-            .font(.system(size: 50))
-            .foregroundStyle(.white)
-            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
-            Text("\(conditionText)")
-            .font(.system(size: 18))
-            .foregroundStyle(.white)
-            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
-            Spacer()
-            Spacer()
-            Spacer()
-            Text("Hourly Forecast")
-            .font(.system(size: 17))
-            .foregroundStyle(.white)
-            .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
-            .bold()
-            ScrollView(.horizontal,showsIndicators: false){
-                HStack{
+            NavigationView{
+                VStack {
                     Spacer()
-                    ForEach(hourlyForecast) { forecast in
-                        VStack {
-                            Text("\(getShortTime(time: forecast.time))")
-                                .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
-                            Text("\(getWeatherEmoji(code: forecast.condition.code))")
-                                .frame(width: 50, height: 14)
-                                .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
-                            Text("\(Int(forecast.temp_c))°C")
-                                .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                    TextField("Enter city name or postal code", text: $query, onEditingChanged: getFocus)
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .background(
+                            Rectangle()
+                                .foregroundColor(.white.opacity(0.2))
+                                .cornerRadius(25)
+                                .frame(height: 50)
+                        )
+                        .padding(.leading, 40)
+                        .padding(.trailing, 40)
+                        .padding(.bottom, 15)
+                        .padding(.top, textFieldHeight)
+                        .multilineTextAlignment(.center)
+                        .accentColor(.white)
+                        .font(Font.system(size: 20, design: .default))
+                        .onSubmit {
+                            Task {
+                                await fetchWeather(query: query)
+                            }
+                            withAnimation {
+                                textFieldHeight = 15
+                            }
                         }
-                        .frame(width: 50, height: 50)
-                    }
-                    Spacer()
-                }
-                .background(Color.white.blur(radius: 75).opacity(0.35))
-                .cornerRadius(15)
-            }
-            .padding(.top, .zero)
-            .padding(.leading, 18)
-            .padding(.trailing, 18)
-            Spacer()
-            Text(" 3 Day Forecast")
-            .font(.system(size: 22))
-            .foregroundStyle(.white)
-            .bold()
-            
-            List(results){ forecast in
-                HStack(alignment: .center, spacing: nil){
-                    Text("\(getShortDate(epoch: forecast.date_epoch))")
-                        .frame(maxWidth: 50, alignment: .leading)
+                    Text("\(cityName)")
+                        .font(.system(size: 35))
+                        .foregroundStyle(.white)
                         .bold()
-                    Text("\(getWeatherEmoji(code: forecast.day.condition.code))")
-                        .frame(maxWidth: 30, alignment: .leading)
-                    Text("\(Int(forecast.day.avgtemp_c))°C")
-                        .frame(maxWidth: 50, alignment: .leading)
+                        .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                        .padding(.bottom, 1)
+                    Text("\(Date().formatted(date: .complete, time: .omitted))")
+                        .font(.system(size: 16))
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                    Text(weatherEmoji)
+                        .font(.system(size: 110))
+                        .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                    Text("\(currentTemp)°C")
+                        .font(.system(size: 50))
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                    Text("\(conditionText)")
+                        .font(.system(size: 18))
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
                     Spacer()
-                    Text("\(forecast.day.condition.text)")
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Spacer()
+                    Spacer()
+                    Text("Hourly Forecast")
+                        .font(.system(size: 17))
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                        .bold()
+                    ScrollView(.horizontal,showsIndicators: false){
+                        HStack{
+                            Spacer()
+                            ForEach(hourlyForecast) { forecast in
+                                VStack {
+                                    Text("\(getShortTime(time: forecast.time))")
+                                        .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                                    Text("\(getWeatherEmoji(code: forecast.condition.code))")
+                                        .frame(width: 50, height: 14)
+                                        .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                                    Text("\(Int(forecast.temp_c))°C")
+                                        .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 2)
+                                }
+                                .frame(width: 50, height: 50)
+                            }
+                            Spacer()
+                        }
+                        .background(Color.white.blur(radius: 75).opacity(0.35))
+                        .cornerRadius(15)
+                    }
+                    .padding(.top, .zero)
+                    .padding(.leading, 18)
+                    .padding(.trailing, 18)
+                    Spacer()
+                    Text(" 3 Day Forecast")
+                        .font(.system(size: 22))
+                        .foregroundStyle(.white)
+                        .bold()
+                    
+                    List(results){ forecast in
+                        NavigationLink{
+                       WeatherDetails(results: $results, cityName: $cityName, index: 0)
+                        } label:{
+                            HStack(alignment: .center, spacing: nil){
+                                Text("\(getShortDate(epoch: forecast.date_epoch))")
+                                    .frame(maxWidth: 50, alignment: .leading)
+                                    .bold()
+                                Text("\(getWeatherEmoji(code: forecast.day.condition.code))")
+                                    .frame(maxWidth: 30, alignment: .leading)
+                                Text("\(Int(forecast.day.avgtemp_c))°C")
+                                    .frame(maxWidth: 50, alignment: .leading)
+                                Spacer()
+                                Text("\(forecast.day.condition.text)")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                        }
+                        .listRowBackground(Color.white.blur(radius: 75).opacity(0.5))
+                    }
+                    .contentMargins(.vertical, 0)
+                    .scrollContentBackground(.hidden)
+                    .preferredColorScheme(.dark)
+                    Spacer()
+                    Text("Data supplied by Weather API")
+                        .foregroundStyle(.white)
+                        .font(.system(size: 14))
                 }
-                .listRowBackground(Color.white.blur(radius: 75).opacity(0.5))
+                
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .background(backgroundColor)
+                
             }
-            .contentMargins(.vertical, 0)
-            .scrollContentBackground(.hidden)
-            .preferredColorScheme(.dark)
-            Spacer()
-            Text("Data supplied by Weather API")
-                .foregroundStyle(.white)
-                .font(.system(size: 14))
-        }
-        .background(backgroundColor)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        
         }
     }
     
-    func fetchWeather () async {
-        let request = AF.request("http://api.weatherapi.com/v1/forecast.json?key=6f99958e722246f68a6221851241507&q=M1G3T8&days=3&aqi=no&alerts=no")
+    func getFocus(focused: Bool){
+        withAnimation{
+            textFieldHeight = 130
+        }
+    }
+    
+    func fetchWeather (query: String) async {
+    var queryText = ""
+    if (query == "") {
+    queryText = "http://api.weatherapi.com/v1/forecast.json?key=6f99958e722246f68a6221851241507&q=M1G3T8&days=3&aqi=no&alerts=no"
+    } else {
+    queryText = "http://api.weatherapi.com/v1/forecast.json?key=6f99958e722246f68a6221851241507&q=\(query)&days=3&aqi=no&alerts=no"
+                }
+        let request = AF.request(queryText)
         request.responseDecodable(of: Weather.self) { response in
             switch response.result {
             case.success(let weather): 

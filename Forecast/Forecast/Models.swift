@@ -21,6 +21,12 @@ struct ForecastDay: Codable, Identifiable {
 
 struct Day: Codable {
     var avgtemp_c : Double
+    var maxwind_kph: Double
+    var totalprecip_mm: Double
+    var daily_chance_of_rain: Int
+    var avghumidity: Int
+    var uv: Double
+    var avgvis_km: Double
     var condition : Condition
 }
 
