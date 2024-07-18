@@ -39,3 +39,4 @@ Para ejecutar la aplicación localmente en tu entorno de desarrollo:
 ## 🤝 Contribuciones
 
 ¡Las contribuciones son bienvenidas! Siéntete libre de abrir un issue o enviar un pull request para mejoras, corrección de errores o nuevas funcionalidades.
+![Grabación-de-pantalla-2024-07-17-a-la_s_-11 08 09 p -m -_online-video-cutter com_](https://github.com/user-attachments/assets/e5ec0d61-e143-4ecf-b53d-59b59642a499)
