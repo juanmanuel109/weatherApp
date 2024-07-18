@@ -35,6 +35,8 @@ Para ejecutar la aplicación localmente en tu entorno de desarrollo:
 <img width="206" alt="cap3" src="https://github.com/user-attachments/assets/031e7adc-2b69-492b-b84a-f5a25fcd740e">
 <img width="206" alt="cap4" src="https://github.com/user-attachments/assets/94d7e469-5254-485b-8940-c71d1eefee24">
 <img width="206" alt="cap5" src="https://github.com/user-attachments/assets/0e0a707b-82cb-46b5-8871-98475a4a1ea2">
+
+## 📱 Video Funcionalidad 
 https://github.com/user-attachments/assets/fb68d1e8-e196-4ea1-ab50-52da03616ba4
 
 ## 🤝 Contribuciones
