@@ -1,6 +1,6 @@
 ## 📱 Weather Forecast App
 
-Este proyecto fue desarrollado como parte del curso de Meta de iOS Capstone. Consiste en una aplicación de pronóstico del tiempo, diseñada y construida utilizando Xcode, Swift, SwiftUI, Alamofire y otras tecnologías modernas para iOS.
+Este proyecto consiste en una aplicación de pronóstico del tiempo, diseñada y construida utilizando Xcode, Swift, SwiftUI, Alamofire y otras tecnologías modernas para iOS.
 
 ## 🛠️ Tecnologías Utilizadas
 
